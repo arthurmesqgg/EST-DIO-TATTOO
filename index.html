@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+<title>henripsy</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<script id="t0qv0v">
+if (localStorage.getItem('tema') === 'dark') {
+    document.documentElement.classList.add('dark');
+}
+</script>
+
+<img id="logo" class="logo">   
+
+<div class="carousel">
+
+<div class="slides">
+    <img id="img1" src="img1.png">
+    <img id="img2" src="img2.png">
+    <img id="img3" src="img3.png">
+</div>
+
+  <button class="prev">&#10094;</button>
+  <button class="next">&#10095;</button>
+
+</div>
+<br><br><br>
+
+<div class="container">
+
+<div class="card">
+<section>
+  <h1>☆TATUADORES☆</h1>
+  <h3>ツ HENRIPSY ツ</h3>
+  <p>
+  ➣ A mais de 10 anos como tatuador, porém uma vida toda rabiscando esboços.
+  Foco principal em trabalho em sketch, que seria um estilo com linhas soltas, e traços caóticos simulando rascunho, com muita hachura,
+  rastelados, boldline e fine line.
+  </p>
+  <p>
+  ➣ Trazendo o sketch para temas religiosos de umbanda candomblé, com desenhos únicos e feitos exclusivamente para cada cliente.
+  </p>
+</section>
+<section>
+<h3>⋇⊶⊰ TRABALHOS ⊱⊷⋇</h3>
+<div class="galeria">
+<img src="trab1.png">
+<img src="trab2.png">
+<img src="trab3.png">
+<img src="trab4.png">
+<img src="trab5.png">
+<img src="trab6.png">
+ </section>
+
+ <!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox">
+  <span class="fechar">&times;</span>
+  <img class="lightbox-img" id="lightbox-img">
+</div>
+<br>
+<section>
+<h2>≪ FORMAS DE CONTATO ≫</h2>
+<div class="redes-card">
+  <a href="https://www.instagram.com/henripsy/" target="_blank">
+    <img src="insta.png" class="insta-icon" alt="Instagram">
+  </a>
+</div>
+
+<br><br>
+</section>
+</div>
+<div class="card">
+<div></div>  
+</section>
+
+  <h3>ツALEATÓRIA ARTEツ</h3>
+  <p>
+  ➣ Trabalho a 5 anos com tatuagem e uma vida toda com arte.
+  Trabalho com diversos estilos, como blackwork, preto e cinza, colorido e tatuagens de pets, sempre criando peças personalizadas para cada cliente.
+  </p>
+  <p>
+  ➣ Atendo com foco nos detalhes, na qualidade e na experiência, seja sua primeira tattoo ou mais uma na coleção.
+  Minha missão é simples: criar uma arte que faça sentido pra você e que você tenha orgulho de carregar.
+  </p>
+</section>
+ <section>
+<h3>⋇⊶⊰ TRABALHOS ⊱⊷⋇</h3>
+<div class="galeria">
+<img src="trab7.png">
+<img src="trab8.png">
+<img src="trab9.png">
+<img src="trab10.png">
+ </section>
+
+ <!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox">
+  <span class="fechar">&times;</span>
+  <img class="lightbox-img" id="lightbox-img">
+</div>
+<section>
+<h2>≪ FORMAS DE CONTATO ≫</h2>
+
+<div class="redes-card">
+  <a href="https://www.instagram.com/aleatoriaartee" target="_blank">
+    <img src="insta.png" class="insta-icon" alt="Instagram">
+  </a>
+</div>
+</section>
+</div>
+
+<br><br><br><br><br><br>
+
+<div class="trab">
+
+<div class="card">
+<section>
+<h1>TRABALHOS RECENTES</h1>
+
+<img src="img4.png">
+<img src="img5.png">
+<img src="img6.png">
+</section>
+</div>
+
+<br><br><br>
+<div class="redes-fixas">
+  <a href="https://www.instagram.com/henripsy/" target="_blank">
+    <img src="insta.png" id="insta-icon" alt="Instagram" class="insta-icon" src="insta.png">
+  </a>
+
+  <a href="https://www.facebook.com/henripsy?locale=pt_BR" target="_blank">
+    <img src="face.png" id="face-icon" alt="Facebook" class="face-icon" src="face.png">
+  </a>
+  <p>➣Agende sua tattoo!</p>
+</div>
+
+<br><br><br>
+
+<div class="toggle-container">
+    <div class="trilho" id="trilho">
+        <div class="indicador"></div>
+    </div>
+
+    <div class="icone-container">
+    <img src="lua.png" id="icone-lua" class="icone">
+    <img src="sol.png" id="icone-sol" class="icone">
+    </div>
+  </div>
+
+<script src="script.js"></script>
+
+<footer>
+  <p>.</p>
+</footer>
+
+
+</body>
+
+<script>
+let index = 0;
+
+const slides = document.querySelector('.slides');
+const totalSlides = document.querySelectorAll('.slides img').length;
+
+document.querySelector('.next').onclick = () => {
+    index = (index + 1) % totalSlides;
+    updateSlide();
+};
+
+document.querySelector('.prev').onclick = () => {
+    index = (index - 1 + totalSlides) % totalSlides;
+    updateSlide();
+};
+
+function updateSlide() {
+    slides.style.transform = `translateX(-${index * 100}%)`;
+}
+
+// auto slide (fora da função)
+setInterval(() => {
+    index = (index + 1) % totalSlides;
+    updateSlide();
+}, 3000);
+</script>
+
+</html>
+</head>
