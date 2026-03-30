@@ -210,5 +210,7 @@ if (temaSalvo === 'dark') {
 }
 
 // atualiza imagens ao carregar
+document.addEventListener('DOMContentLoaded', () => {
 atualizarImagens();
+});
 
