@@ -14,15 +14,6 @@ if (trilho) {
     });
 }
 
-document.addEventListener('mouseleave', () => {
-    if (lightbox.style.display === 'flex') {
-        lightbox.style.display = 'none';
-    }
-});
-
-window.addEventListener('blur', () => {
-    lightbox.style.display = 'none';
-});
 
 function atualizarImagens() {
     const dark = document.body.classList.contains('dark');
@@ -46,25 +37,77 @@ function atualizarImagens() {
 }
 
 
+const galerias = document.querySelectorAll('.galeria');
 const imagens = document.querySelectorAll('.galeria img');
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightbox-img');
 const fechar = document.querySelector('.fechar');
+const nextBtn = document.querySelector('.next-img');
+const prevBtn = document.querySelector('.prev-img');
 
-imagens.forEach(img => {
-    img.addEventListener('click', () => {
-        lightbox.style.display = 'flex';
-        lightboxImg.src = img.src;
+
+let indexAtual = 0;
+let listaImagens = [];
+
+galerias.forEach(galeria => {
+    const imgs = galeria.querySelectorAll('img');
+
+    imgs.forEach((img, index) => {
+        img.addEventListener('click', () => {
+
+            // pega só as imagens dessa galeria
+            imagens = Array.from(imgs).map(i => i.src);
+
+            indexAtual = index;
+            abrirImagem();
+        });
     });
 });
 
-fechar.addEventListener('click', () => {
-    lightbox.style.display = 'none';
+imagens.forEach((img, index) => {
+    listaImagens.push(img.src);
+
+    img.addEventListener('click', () => {
+        indexAtual = index;
+        abrirImagem();
+    });
 });
 
+function abrirImagem() {
+    lightbox.style.display = 'flex';
+    lightboxImg.src = listaImagens[indexAtual];
+}
+
+function fecharImagem() {
+    lightbox.style.display = 'none';
+}
+
+function proximaImagem() {
+    indexAtual = (indexAtual + 1) % listaImagens.length;
+    abrirImagem();
+}
+
+function imagemAnterior() {
+    indexAtual = (indexAtual - 1 + listaImagens.length) % listaImagens.length;
+    abrirImagem();
+}
+
+fechar.addEventListener('click', fecharImagem);
+nextBtn.addEventListener('click', proximaImagem);
+prevBtn.addEventListener('click', imagemAnterior);
+
 lightbox.addEventListener('click', (e) => {
-    if (e.target !== lightboxImg) {
-        lightbox.style.display = 'none';
+    if (e.target === lightbox) {
+        fecharImagem();
+    }
+});
+
+/* TECLADO */
+document.addEventListener('keydown', (e) => {
+    if (lightbox.style.display === 'flex') {
+        if (e.key === 'Escape') fecharImagem();
+        if (e.key === 'ArrowRight') proximaImagem();
+        if (e.key === 'ArrowLeft') imagemAnterior();
     }
 });
 
