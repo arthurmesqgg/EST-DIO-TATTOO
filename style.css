@@ -1,6 +1,7 @@
 body {
     margin: 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.5px;    
     color: var(--text);
     text-align: center;
     background: var(--bg);
@@ -28,12 +29,26 @@ body {
     max-width: 400px;
     margin-left: auto;
     margin-right: auto;
+    letter-spacing: 2px;
 }
 
 h1, h2, h3 {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Anton', sans-serif;
     color: var(--text);
     transition: all 0.5s ease;
+    letter-spacing: 3px;
+    font-weight: 400;        
+}
+
+h3 {
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+
+h1 {
+    font-size: 50px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
 }
 
 /* Cards */
@@ -383,4 +398,37 @@ body.dark #icone-lua {
 
 .redes-card img {
     transition: 0.3s ease;
+}
+
+.prev-img, .next-img {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 50px;
+    height: 50px;
+
+    border-radius: 50%;
+    border: none;
+
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(5px);
+
+    color: white;
+    font-size: 25px;
+
+    cursor: pointer;
+    transition: 0.3s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.prev-img { left: 20px; }
+.next-img { right: 20px; }
+
+.prev-img:hover, .next-img:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-50%) scale(1.1);
 }
