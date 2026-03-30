@@ -48,6 +48,87 @@ const prevBtn = document.querySelector('.prev-img');
 
 let indexAtual = 0;
 let listaImagens = [];
+let startX = 0;
+let endX = 0;
+let scale = 1;
+let initialDistance = 0;
+
+lightbox.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+        initialDistance = getDistance(e.touches);
+    }
+});
+
+lightbox.addEventListener('touchmove', (e) => {
+    if (e.touches.length === 2) {
+        let currentDistance = getDistance(e.touches);
+
+        if (initialDistance > 0) {
+            let zoom = currentDistance / initialDistance;
+            scale = Math.min(Math.max(1, zoom), 3);
+
+            lightboxImg.style.transform = `scale(${scale})`;
+        }
+    }
+});
+
+function getDistance(touches) {
+    let dx = touches[0].clientX - touches[1].clientX;
+    let dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+}
+
+lightboxImg.addEventListener('wheel', (e) => {
+    e.preventDefault();
+
+    const rect = lightboxImg.getBoundingClientRect();
+
+    // posição do mouse dentro da imagem (0 → 1)
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+
+    // transforma em %
+    const originX = x * 100;
+    const originY = y * 100;
+
+    // aplica o ponto do zoom
+    lightboxImg.style.transformOrigin = `${originX}% ${originY}%`;
+
+    // zoom
+    if (e.deltaY < 0) {
+        scale += 0.2;
+    } else {
+        scale -= 0.2;
+    }
+
+    scale = Math.min(Math.max(1, scale), 3);
+
+    lightboxImg.style.transform = `scale(${scale})`;
+});
+
+lightboxImg.addEventListener('click', () => {
+    scale = 1;
+    lightboxImg.style.transform = `scale(1)`;
+});
+
+lightbox.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+});
+
+lightbox.addEventListener('touchmove', (e) => {
+    endX = e.touches[0].clientX;
+});
+
+lightbox.addEventListener('touchend', () => {
+    let diferenca = startX - endX;
+
+    //  sensibilidade do swipe
+    if (diferenca > 50) {
+        proximaImagem(); // swipe pra esquerda
+    } else if (diferenca < -50) {
+        imagemAnterior(); // swipe pra direita
+    }
+});
 
 galerias.forEach(galeria => {
     const imgs = galeria.querySelectorAll('img');
@@ -76,6 +157,8 @@ imagens.forEach((img, index) => {
 function abrirImagem() {
     lightbox.style.display = 'flex';
     lightboxImg.src = listaImagens[indexAtual];
+    scale = 1;
+    lightboxImg.style.transform = 'scale(1)';
 }
 
 function fecharImagem() {
