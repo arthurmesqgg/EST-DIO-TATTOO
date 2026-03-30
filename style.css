@@ -155,25 +155,24 @@ p {
 }
 
 .redes img {
-    width: 1px;
-    height: 1px;
     transition: transform 0.2s, filter 0.2s;
     cursor: pointer;
-    width: 1px;
+    width: 120px;
     height: auto;
 }
 
 .redes img:hover {
     transform: scale(1.2);
-    filter: brightness(1.2);
 }
 /* Rodapé */
 footer {
     margin-top: 100px;
-    padding: 50px;
-    background: #222;
-    color: white;
+    padding: 20px;
+    background: var(--card);
+    transition: background 0.5s ease, color 0.5s ease;
+    border-radius: 10px;
 }
+
 
 /* Modo claro e escuro */
 .trilho {
