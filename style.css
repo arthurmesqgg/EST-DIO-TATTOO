@@ -218,7 +218,7 @@ body.dark{
 }
 
 :root {
-    --bg: linear-gradient(180deg, #ffffff, #7e7e7e);
+    --bg: #bebebe;
     --text: #000000;
     --card: #ffffff;
     --accent: #000000;
@@ -376,6 +376,7 @@ body.dark #icone-lua {
     transition: transform 0.2s ease;
     cursor: zoom-in;
     transform-origin: center;    
+    touch-action: pan-y;
 }
 
 .fechar {
@@ -469,7 +470,7 @@ body.dark #icone-lua {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
     .container {
         padding: 10px;
     }
