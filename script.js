@@ -52,25 +52,77 @@ let startX = 0;
 let endX = 0;
 let scale = 1;
 let initialDistance = 0;
+let isDragging = false;
+let currentX = 0;
+let moveX = 0;
+let scrollCooldown = false;
+
+lightbox.addEventListener('wheel', (e) => {
+    if (lightbox.style.display !== 'flex') return;
+
+    const rect = lightboxImg.getBoundingClientRect();
+
+    const mouseDentroDaImagem =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+
+    // se estiver na imagem, deixa o zoom funcionar
+    if (mouseDentroDaImagem) return;
+
+    e.preventDefault();
+
+    if (scrollCooldown) return;
+    scrollCooldown = true;
+
+    if (e.deltaY > 0) {
+        proximaImagem(); // scroll pra baixo vai pra próxima
+    } else {
+        imagemAnterior(); // scroll pra cima vai pra anterior
+    }
+
+    setTimeout(() => {
+        scrollCooldown = false;
+    }, 400);
+});
+
 
 lightbox.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 2) {
-        initialDistance = getDistance(e.touches);
-    }
+    isDragging = true;
+    startX = e.touches[0].clientX;
+    lightboxImg.style.transition = 'none';
 });
 
 lightbox.addEventListener('touchmove', (e) => {
-    if (e.touches.length === 2) {
-        let currentDistance = getDistance(e.touches);
+    if (!isDragging) return;
 
-        if (initialDistance > 0) {
-            let zoom = currentDistance / initialDistance;
-            scale = Math.min(Math.max(1, zoom), 3);
+    currentX = e.touches[0].clientX;
+    moveX = currentX - startX;
 
-            lightboxImg.style.transform = `scale(${scale})`;
-        }
-    }
+    // move a imagem junto com o dedo
+    lightboxImg.style.transform = `translateX(${moveX}px) scale(${scale})`;
 });
+
+lightbox.addEventListener('touchend', () => {
+    isDragging = false;
+
+    lightboxImg.style.transition = 'transform 0.3s ease';
+
+    // sensibilidade
+    if (moveX > 80) {
+        imagemAnterior();
+    } else if (moveX < -80) {
+        proximaImagem();
+    } else {
+        // volta pro centro
+        lightboxImg.style.transform = `translateX(0) scale(${scale})`;
+    }
+
+    moveX = 0;
+});
+
+
 
 function getDistance(touches) {
     let dx = touches[0].clientX - touches[1].clientX;
@@ -119,16 +171,7 @@ lightbox.addEventListener('touchmove', (e) => {
     endX = e.touches[0].clientX;
 });
 
-lightbox.addEventListener('touchend', () => {
-    let diferenca = startX - endX;
 
-    //  sensibilidade do swipe
-    if (diferenca > 50) {
-        proximaImagem(); // swipe pra esquerda
-    } else if (diferenca < -50) {
-        imagemAnterior(); // swipe pra direita
-    }
-});
 
 galerias.forEach(galeria => {
     const imgs = galeria.querySelectorAll('img');
@@ -136,29 +179,34 @@ galerias.forEach(galeria => {
     imgs.forEach((img, index) => {
         img.addEventListener('click', () => {
 
-            // pega só as imagens dessa galeria
-            imagens = Array.from(imgs).map(i => i.src);
+            listaImagens = Array.from(imgs).map(i => i.src);
 
             indexAtual = index;
+
             abrirImagem();
         });
     });
 });
 
-imagens.forEach((img, index) => {
-    listaImagens.push(img.src);
+function abrirImagem(direcao = 'direita') {
+    
+    lightboxImg.style.transition = 'none';
 
-    img.addEventListener('click', () => {
-        indexAtual = index;
-        abrirImagem();
-    });
-});
+    // começa fora da tela
+    lightboxImg.style.transform =
+        direcao === 'direita'
+        ? 'translateX(20%) scale(1)'
+        : 'translateX(-20%) scale(1)';
 
-function abrirImagem() {
     lightbox.style.display = 'flex';
     lightboxImg.src = listaImagens[indexAtual];
+
     scale = 1;
-    lightboxImg.style.transform = 'scale(1)';
+
+    setTimeout(() => {
+        lightboxImg.style.transition = 'transform 0.3s ease';
+        lightboxImg.style.transform = 'translateX(0) scale(1)';
+    }, 10);
 }
 
 function fecharImagem() {
@@ -167,12 +215,12 @@ function fecharImagem() {
 
 function proximaImagem() {
     indexAtual = (indexAtual + 1) % listaImagens.length;
-    abrirImagem();
+    abrirImagem('direita');
 }
 
 function imagemAnterior() {
     indexAtual = (indexAtual - 1 + listaImagens.length) % listaImagens.length;
-    abrirImagem();
+    abrirImagem('esquerda');
 }
 
 fechar.addEventListener('click', fecharImagem);
